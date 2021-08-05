@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: name1
+  labels:
+    app: mysql
+spec:
+  selector: #permite seleccionar un conjunto de objetos que cumplan las condiciones
+    matchLabels:
+      app: mysql
+  replicas: 1 #replicaset
+  template: # Plantilla que define los containers
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql   
+          image: jbarrera99/bd-mysql:latest
+          ports:
+            - name: mysql
+              containerPort: 3306
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: name1
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql
+  ports:
+  - protocol: TCP
+    port: 3306

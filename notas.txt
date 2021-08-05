@@ -1,0 +1,53 @@
+Google Cloud:
+--------------
+gcloud auth login
+gcloud config set project curso-k8s-321317
+
+gcloud config set compute/zone us-west1-a
+
+gcloud container clusters create demo --num-nodes=3 --machine-type=e2-standard-2
+
+gcloud container clusters get-credentials demo --zone us-west1-a --project <your project>
+
+cat ~/.kube/config 
+kubectl cluster-info
+kubectl get nodes
+
+gcloud container clusters delete demo --zone us-west1-a
+gcloud auth revoke
+
+==========================================================================================================================
+
+Azure:
+------
+az login
+ssh-keygen
+az aks create --resource-group=<your resource group> --name=mitocode-cluster
+az aks get-credentials --resource-group=<your resource group>--name=mitocode-cluster
+
+cat ~/.kube/config 
+kubectl cluster-info
+kubectl get nodes
+
+az aks delete --resource-group=<your resource group> --name=mitocode-cluster
+az logout
+
+==========================================================================================================================
+
+AWS:
+------
+aws configure
+cat ./eksctl/eks-config.yml
+
+eksctl create cluster -f ./eksctl/eks-config.yml
+[Si no obtuviste el kubeconfig actualizado] -> eksctl utils write-kubeconfig --cluster=<name>
+
+cat ~/.kube/config 
+kubectl cluster-info
+kubectl get nodes
+
+eksctl delete cluster --name mitocode-cluster-aws
+aws configure
+-> seteas cualquier valor 
+
+=========================================================

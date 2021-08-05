@@ -1,0 +1,8 @@
+gcloud auth login
+gcloud config set project curso-k8s-321317
+
+gcloud config set compute/zone us-west1-a
+
+gcloud container clusters create demo --num-nodes=3 --machine-type=e2-standard-2
+
+gcloud container clusters get-credentials demo --zone us-west1-a --project <your project>

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: apipersonas
+  namespace: name1
+  labels:
+    app: apipersonas
+spec:
+  replicas: 2 # el comando rollout funciona con rs pero no con rc
+  selector: #esta feature hace la diferencia con los RC (replication controller)
+    #pueden usar cualquier criterio de busq de pods
+    matchLabels: 
+      app: apipersonas
+  # especificacion del pod
+  template:
+    metadata:
+      labels:
+        app: apipersonas
+    spec:
+      containers:
+      - name: apipersonas
+        image: jbarrera99/api-persona-v1:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8080
+        env:
+          - name: host
+            value: mysql
+          - name: port
+            value: "3306"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apiproxy
+  namespace: name1
+spec:
+  type: ClusterIP
+  selector:
+    app: apipersonas
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080

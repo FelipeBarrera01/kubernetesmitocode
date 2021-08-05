@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apipersonas
+  namespace: name2
+  labels:
+    tier: backend
+    app: apipersonas
+spec:
+  selector: #permite seleccionar un conjunto de objetos que cumplan las condiciones
+    matchLabels:
+      tier: backend
+      app: apipersonas
+  replicas: 4 #replicaset
+  template: # Plantilla que define los containers
+    metadata:
+      labels:
+        tier: backend
+        app: apipersonas
+    spec:
+      containers:
+        - name: apipersonas
+          image: jbarrera99/api-persona-v1:latest
+          ports:
+              - containerPort: 8080
+          env:
+              - name: host
+                value: mysql.name2.svc.cluster.local
+              - name: port
+                value: "3306"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apipersonas
+  namespace: name2
+spec:
+  type: ClusterIP
+  selector:
+    app: apipersonas
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080

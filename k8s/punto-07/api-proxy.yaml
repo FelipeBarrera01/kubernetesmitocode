@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apiproxy
+  namespace: name2
+  labels:
+    tier: backend
+    app: apiproxy
+spec:
+  selector: #permite seleccionar un conjunto de objetos que cumplan las condiciones
+    matchLabels:
+      tier: backend
+      app: apiproxy
+  replicas: 1 #replicaset
+  template: # Plantilla que define los containers
+    metadata:
+      labels:
+        tier: backend
+        app: apiproxy
+    spec:
+      containers:
+        - name: api
+          image: jbarrera99/proxy-backend:latest
+          ports:
+              - containerPort: 80
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "700m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apiproxy
+  namespace: name2
+spec:
+  type: ClusterIP
+  selector:
+    app: apiproxy
+  ports:
+  - protocol: TCP
+    port: 80

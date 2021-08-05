@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: name2
+  labels:
+    app: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  replicas: 1
+  serviceName: mysql
+  template: 
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql   
+          image: jbarrera99/bd-mysql:latest
+          ports:
+            - name: mysql
+              containerPort: 3306
+       

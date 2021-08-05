@@ -1,0 +1,2 @@
+docker  build -t jbarrera99/api-persona-v1 .
+docker push jbarrera99/api-persona-v1
